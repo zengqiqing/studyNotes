@@ -32,3 +32,28 @@ function matchPhoneNum(str,regx){
 };
 ```
 
+
+
+### 字符串数据脱敏
+
+```javascript
+    /**
+     * 字符串数据脱敏
+     * @str      内容
+     * @beginLen 请传入正整数
+     * @endLen   请传入负数或0，🙅‍♂️ 不要传入正整数
+     * **/
+    static desensitization = (str, beginLen, endLen) => {
+        let len = str.length;
+        let firstStr = str.substr(0, beginLen);
+        let lastStr = str.substr(endLen);
+        let middleStr = str
+            .substring(beginLen, len - Math.abs(endLen))
+            .replace(/[\s\S]/gi, '*');
+        let tempStr = Object.is(endLen, 0)
+            ? firstStr + middleStr
+            : firstStr + middleStr + lastStr;
+        return tempStr;
+    }
+```
+
