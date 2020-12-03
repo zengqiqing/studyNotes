@@ -185,7 +185,16 @@ for ... in 循环中的代码每执行一次，就会对数组的元素或者对
 
 符号 || 是用来做判断，‘或’的意思。 符号 | 是 二进制之后相加得到的结果， |0 就是取整的方法。通用应用于分秒换算
 
-![ABD2B88D-D24B-4208-9101-455E8C87185B](/var/folders/65/71xg97ds6hnc7_6xq9b987rh0000gp/T/com.yinxiang.Mac/WebKitDnD.TR2dyx/ABD2B88D-D24B-4208-9101-455E8C87185B.png)
+<font color='red' fontWeight='bold'>a为0时代表的是一种状态，那么我要判断a不为空不为null但能为0时，执行下一步的操作该如何编写更优雅？</font>
+
+```javascript
+var a = null
+if(a||a===0){
+ console.log('进入')
+}else{console.log('退出')} // 退出
+```
+
+
 
 <font color='red'>**Number.isFinite()**</font> 检测一个数值是否有限（即不是Infinity）此方法不能用于字符串，只适用于类型为nuber类型或infinity无限大
 
