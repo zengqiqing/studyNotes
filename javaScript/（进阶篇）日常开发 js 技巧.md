@@ -143,3 +143,12 @@ export function resetTime() {
 
 ![58D99B96-D3EC-43E0-A54A-233E302BBD2F](/var/folders/65/71xg97ds6hnc7_6xq9b987rh0000gp/T/com.yinxiang.Mac/WebKitDnD.pftDos/58D99B96-D3EC-43E0-A54A-233E302BBD2F.png)
 
+### 正则校验密码内容（必须含有数字，大小写字母，且字符长度为6位以上）
+
+```javascript
+const pattern = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)(?=.*?[!#@*&.])[a-zA-Z\d!#@*&.]{8,}$/,
+const str = '1#2s23sdfa4qqQ';
+
+console.log(pattern.test(str)); //ture
+```
+
