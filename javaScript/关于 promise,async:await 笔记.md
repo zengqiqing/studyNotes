@@ -214,3 +214,96 @@
 
   
 
+  	- async函数的实现原理,是将 Generator函数和自执行器,包装在一个函数里.async/Await的作用就是把异步变成同步,他是异步编程的终极方案
+
+  - Async 函数返回一个 promise 对象,可以使用 then 方法添加回调函数.当函数执行的时候,一旦遇到 await 就先返回.等到异步操作完成,再接着执行函数体内后面的语句.
+
+  ```javascript
+  //基础语法
+  function timeout(ms){
+      return new Promise((resolve)=>{
+      setTimeout(resolve,ms)
+  })
+  }
+  ​
+  async function asyncPrint(value,ms){
+      await timeout(ms)
+      console.log(value)
+  }
+  asyncPrint('hello',500)
+  
+  ```
+
+- async 函数返回的 promise 对象,必须等到内部所有的 await 命令后面的 promise 对象执行完才会发生状态改变,除非遇到 return 语句或者抛出错误.也就是说只有 async 函数内部的异步操作执行完,才会执行 then 方法指定的回调函数
+
+- 正常情况下,await命令后面是一个 promise 对象,返回该对象的结果,如果不是 promise 对象就直接返回对应的值
+
+  ```javascript
+  async function f() {
+    // 等同于
+    // return 123;
+    return await 123;
+  }
+  
+  f().then(v => console.log(v))
+  ```
+
+- 任何一个 await 语句后面的 promise 对象变为 reject 状态,那么整个 async函数都会中断执行
+
+  ```javascript
+  async function f() {
+    await Promise.reject('出错了');
+    await Promise.resolve('hello world'); // 不会执行
+  }
+  ```
+
+- 如果希望即使前一个异步操作失败,也不要中断后面的异步操作,此时可以将第一个 await 放在 try/catch 结构里面
+
+  ```javascript
+  async function f(){
+      try{await Promise.reject('出错了')}
+      catch(e){
+          console.log(e,'catch 里面的打印')
+      }
+      return await Promise.resolve('hello')
+  }
+  f().then(v=>{console.log(v)})
+  .catch(err=>{console.log(err)})
+  //VM3676:4 出错了 catch 里面的打印
+  //hello
+  ```
+
+- 多个 await 命令后面的异步操作,如果不存在继发关系(互不依赖),最好让他们同时触发.
+
+  ```javascript
+  /**
+  	*场景:
+  	*上面代码中，getFoo和getBar是两个独立的异步操作（即互不依赖），被写成继发关系。这样比较耗时，因为只有getFoo完成以后，才会执行getBar，完全可以让它们同时触发
+  **/
+  let foo = await getFoo()
+  let bar = await getBar()
+  
+  //写法
+  let [foo,bar] = [foo, bar] = await Promise.all([getFoo(), getBar()]);
+  
+  ```
+
+  
+
+延伸问题:
+
+Promise 和 async/await 的区别是什么?
+
+```
+promise是ES6，async/await是ES7,async/await 是基于 promise 实现的,写法更加优雅他们共同的目的都为了解决编程异步问题
+他们的 reject 状态不一样,promise错误可以通过catch来捕捉，建议尾部捕获错误;async/await既可以用.then又可以用try-catch捕捉
+```
+
+
+
+
+
+了解完 promise 和 async/await 的用法后,我们将进入更深入的了解:
+
+setTimeout async promise 执行顺序.
+
