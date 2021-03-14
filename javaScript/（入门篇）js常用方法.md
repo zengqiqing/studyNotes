@@ -352,7 +352,41 @@ some()是对数组中每一项运行给定函数，如果该函数对**任一项
 
 <font color='red'>**filter**</font>的使用---根据条件查找数组中符合当前查找的项，返回数组
 
-![ABCB3541-F3F6-43E0-9C78-D5DDC45E8272](/var/folders/65/71xg97ds6hnc7_6xq9b987rh0000gp/T/com.yinxiang.Mac/WebKitDnD.tXSmqt/ABCB3541-F3F6-43E0-9C78-D5DDC45E8272.png)
+```javascript
+var arr = [{id:1,name:'coco'},{id:2,name:'kevin'}]
+var a = arr.filter(v=>v.id === 1)
+```
+
+
+
+<font color='red'>**找出数组中最大的值用Math.max ; 找出数组中最小值用Math.min**</font>
+
+```
+// es6写法
+var arr = [1,2,3,4,5,8]
+var a = Math.max(...arr)
+console.log(a) // 8 
+
+//es5写法
+var arr = [1,2,3,6,4]
+var a = Math.max.apply(null,arr)
+console.log(a) // 6
+
+// reduce写法
+var arr = ['2','4','9']
+var a = arr.reduce(num1,num2)=>{
+	return num1 > num2 ? num1:num2
+}
+console.log(a)//'9'
+
+//数组对象中查找出最大的值
+//使用reduce返回一个对象
+var arr = [{id:1},{id:2}]
+var a = arr.reduce((pre,current)=>{
+	return (pre.y > current.y) ? pre : current
+})
+console.log(a)//{id:2}
+```
 
 
 

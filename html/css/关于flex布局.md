@@ -4,6 +4,20 @@ flex布局：
 
 设为 Flex 布局以后，子元素的float、clear和vertical-align属性将失效
 
+补充：
+一开始我总是没法理解阮大神的flex文章上讲的轴的问题，后面找了一下别人的看法有了大致的理解，如下👇
+
+- 决定主轴的方向属性是：flex-deirection属性，决定究竟是横轴作为主轴呢还是纵轴作为主轴的,默认主轴方向为横轴（row）其实方向在左端。
+
+  ```css
+  display:flex;
+  flex-deirection:row //横轴作为主轴
+  flex-deirection:column //纵轴作为主轴
+  ```
+
+- 决定交叉轴的方向属性是：`align-item` ，交叉轴，其实就是决定主轴后，另外一条就叫交叉轴。他们交叉的点就是决定元素在容器中的排列是居中呢，还是靠左端 or 右端
+- ![image-20210307120437484](/Users/cole/Library/Application Support/typora-user-images/image-20210307120437484.png)
+
 1.**flex-direction**属性----决定主轴的排列顺序
 
 row:由左到右排列
