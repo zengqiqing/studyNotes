@@ -165,9 +165,79 @@ func.apply(thisArg,[param1,param2,....])
 
 #### 实现 call , apply ,bind 的方法
 
-https://zhuanlan.zhihu.com/p/92786246
+https://juejin.cn/post/6844903902026924040
 
-https://segmentfault.com/a/1190000014342422
+```javascript
+//手写实现 call 原理 -------- es5版本（通俗容易理解的版本）
+Function.prototype.myCall = function(obj){
+  //1. 定义一个新的对象，若传入的 obj 存在，则新对象等于 obj,若 obj不存在，则等于 window；
+	var newObj = obj || window;
+  
+ //2. 把 this 挂在当前定义的新对象上（this 即为调用的函数）；
+	newObj.fn = this;
+  
+  /**
+  * 3.处理函数的参数，之前没弄懂这个arguments怎么来的，但后面我发现在 obj 后面增加多一些参数，例如👇
+  	传参：Function.prototype.myCall = function(obj,params1,params2){...}
+  	调用：a.myCall(b,'hello','boy')
+		打印arguments,确实可以获取到'hello','boy'这两个参数，且可以获得传入的第一个参数 obj
+  **/
+	var params = [...arguments].slice(1);
+  
+  //4.执行创建的新对象的 fn 函数（即为要调用的函数）；
+  var result = newObj.fn(...params);
+  
+  // 5.在最后执行完后，将这个挂载的 fn 函数删除，避免传入对象造成污染
+	delete newObj.fn;
+  // 6.最后返回调用结果
+	return result;
+}
+
+
+//手写实现 call 原理 -------- es6版本（快速实现的版本）
+Function.prototype.myCall = function (context, ...args) {
+  // 检查调用myCall的对象是否为函数
+  if (typeof this !== 'function') {
+    throw new TypeError('not a function')
+  }
+  // 将函数作为传入的context对象的一个属性，调用该函数
+  const fn = Symbol()
+  context[fn] = this
+  context[fn](...args)
+  // 不要忘了调用之后删除该属性
+  delete context[fn]
+}
+
+// 试验是否可行
+var obj1 = {
+	x:1,
+	count:function(){
+		return this.x
+	}
+}
+
+var obj2 = {x:3333}
+
+var b = obj1.count.myCall(obj2)
+console.log(b) //3333
+```
+
+```javascript
+// apply 的实现与 call的实现一致，无非不一样的地方是传参时，call 要把参数都结构出来，apply 不需要，因为他的参数形式需要的是 array
+Function.prototype.apply = function (context, args) {
+  if (typeof this !== 'function') {
+    throw new TypeError('not a function')
+  }
+  const fn = Symbol()
+  context[fn] = this
+  context[fn](...args)
+  delete context[fn]
+}
+```
+
+bind 的实现？？？
+
+
 
 #### 总结：
 
@@ -176,4 +246,5 @@ https://segmentfault.com/a/1190000014342422
 - 所有的this关键字，在函数运行时，才能确定它的指向。
 - this所在的函数由哪个对象调用，this就会指向谁
 - 当函数执行时，没有确定的调用对象时，则this指向window
+- 关于 this 指向，总有数不清的困扰，但是只要我们很多时候牢记一点，this 永远指向它最后调用的一个地方。
 
