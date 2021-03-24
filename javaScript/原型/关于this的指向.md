@@ -181,6 +181,7 @@ Function.prototype.myCall = function(obj){
   	传参：Function.prototype.myCall = function(obj,params1,params2){...}
   	调用：a.myCall(b,'hello','boy')
 		打印arguments,确实可以获取到'hello','boy'这两个参数，且可以获得传入的第一个参数 obj
+		* arguments 是一个对应于传递给函数的参数的类数组对象。
   **/
 	var params = [...arguments].slice(1);
   
