@@ -2,7 +2,7 @@
 
 ### this是什么？
 
-this表示当前对象的一个引用，但在js中，this不是固定不变的，他会随着执行环境而改变的。
+this表示当前对象的一个引用，但在js中，this不是固定不变的，他会随着执行环境而改变的。当在全局作用域中调用一个函数时，this对象总是指向Global对象
 
 #### 普通对象，构造函数和普通的函数 的 this 指向都是怎样的呢？
 
@@ -72,6 +72,29 @@ console.log(p2)
 //打印出来3333的值:Testfunc{name:'kevin'}指向了Testfunc new出来的实例对象p2
 
  ```
+
+#### 遇到一个 this 的指向疑惑
+
+```javascript
+function test (){
+    console.log(this,'000000')
+    var obj = {
+    a:function (){
+       console.log(this,'1111')
+       return function(){
+            console.log(this,'22222')
+        }
+    	}
+    }
+return obj
+}
+
+test().a()()
+//提问：2222的 this 指向指向哪里呢？
+解答：指向 window，一开始认为这个 this 应该指向 obj 对象，但打印下来竟然指向 window了
+```
+
+
 
 ##### 结合上面的普通函数与setTimeout的爱恨情仇，那么提出了个疑问，我要怎么样才能让setTimeout的this指向上层的函数上呢？
 
@@ -235,10 +258,6 @@ Function.prototype.apply = function (context, args) {
   delete context[fn]
 }
 ```
-
-bind 的实现？？？
-
-
 
 #### 总结：
 
