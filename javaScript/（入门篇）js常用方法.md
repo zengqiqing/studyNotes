@@ -1,5 +1,10 @@
 ## js常用方法
 
+### 驼峰命名法：
+
+- 大驼峰法：也称为：帕斯卡命名法：（pascal方法）常用于类名，函数名，属性，命名空间。 例如：`SetMyEvent`
+- 小驼峰法，函数名中的每一个逻辑断点都有一个大写字母来标记，例如 ` setMyEvent`
+
 ### 以下方法使用于Object
 
 <font color='red'>判断为空对象：**Object.keys(userObj).length**</font>
