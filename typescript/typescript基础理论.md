@@ -28,9 +28,7 @@ ts在编译的时候就能发现类型的错误，js在运行的时候才能发�
 
 变量的数据类型是不可以改变的。
 
-
-
-##### ts的枚举类型可以解决我们大量的if else问题
+##### ts的枚举类型
 
 具体参考/Users/other/zqq/GitHub/ts_in_action/src/demo/enum.ts
 
