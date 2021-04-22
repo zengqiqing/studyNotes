@@ -62,4 +62,5 @@ x = y;  // error, x and y are not compatible
 
 
 
-交叉类型没看懂！
+implements还没搞太清楚。
+

@@ -32,66 +32,89 @@ ts在编译的时候就能发现类型的错误，js在运行的时候才能发�
 
 具体参考/Users/other/zqq/GitHub/ts_in_action/src/demo/enum.ts
 
-##### 对象类型接口
+### 声明空间
 
-- 鸭式辨型法--（动态语言风格）有一只鸟，叫起来像鸭子，走路像鸭子，那么这只鸟就可以被认为是一只鸭子
+☝️：类型声明空间----- 类型声明空间用来当做类型注解的内容,但不能把它作为一个变量来使用，因为它没有定义在变量声明空间中。
 
-  ```typescript
-  interface List{
-      id:number;
-      name:string;
-  }
-  
-  interface Result {
-      data:List[]
-  }
-  
-  const render = (results:Result) =>{
-      const {data} = results;
-      data.forEach((value)=>{
-          console.log(value.id,'----- 对象接口 ----',value.name);
-      })
-  }
-  
-  let results = {
-      data:[
-          {
-              id:1,
-              name:'coco',
-              sex:'male'//这个sex没有被定义类型，但在这里没有报错，这是因为传入的对象满足接口的必要条件，那么即使有多余的属性也不会报错
-          },
-          {
-              id:2,
-              name:'kevin'
-          }
-      ]
-  }
-  
-  render(results)
-  ```
+```typescript
+//定义类型声明空间
+class Foo {}
+interface Bar {}
+type Bas = {}
 
-  ##### 接口（对象类型接口、函数类型接口）
+//使用类型注解
+let foo:Foo;
+let bar: Bar;
+let bas: Bas;
 
-  简单函数类型接口：
+```
+
+✌️：变量声明空间----变量声明空间包含可作用变量的内容。
+
+```typescript
+class Foo {} //提供一个类型
+const somevar = Foo //提供一个变量Foo到class Foo{}的变量声明空间中
+const someOthervar = 133
+```
+
+#### 文件模块
+
+- 文件模块被称为外部模块，如果ts文件中含有`import` 或者 `export`，那么它会在这个文件中创建一个本地的作用域。
+
+```typescript
+//a.ts
+export const foo = 111 //注意，如果a文件中没有export关键字，那么该文件中的变量方法会视为全局的，那么其他文件也定义同样名字的变量的时候就会声明重复的错误
+
+//b.ts
+import {foo} from './a.ts'
+```
+
+- 文件的导入导出
 
   ```typescript
-  //语法
-  //回顾之前：使用变量定义函数的写法
-  let add1:(x:number,y:number) => number;
-  
-  interface add2 {
-      (x:number,y:number):number
+  //1.使用export关键字导出一个变量或类型(语法一)
+  export const someVar = 123;
+  export type someType = {
+    foo:string;
   }
   
+  //1.1使用export关键字导出一个变量或类型(语法二)
+  const someVar = 123;
+  type someType = {
+    type: string;
+  };
+  
+  export { someVar, someType };
+  
+  //2.用重命名变量的方式导出(语法三)
+  //a.ts
+  const someVar = 123
+  export {someVar as aDifferentName}
+  
+  //b.ts
+  import {aDifferentName} from './a.ts' //ok
+  import {someVar} from 'a.ts'//error
+  
+  //3.除了指定加载某个输出值，还可以使用整体加载，即用星号（*）指定一个对象，所有输出值都加载在这个对象上面
+  
+  //a.ts
+  const someVar = 123;
+  const kk = () => { }
+  
+  export {
+      someVar,
+      kk
+  }
+  
+  // b.ts
+  import * as foo from './a.ts';
+  console.log(foo.someVar) //123
   
   ```
 
-  混合型函数接口（一个接口既可以定义一个函数，也可以像对象拥有属性和方法）：
+  ⚠️ 注意：
 
-  ```
-  
-  ```
+  - 
 
-  
 
-  
+
