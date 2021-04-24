@@ -85,11 +85,76 @@
 
   
 
-- Typeof 
+- in：可以安全地检查一个对象是否存在一个属性，通常用作类型保护。
 
+  ```typescript
+  interface A {
+    x:number;
+}
+  
+  interface B {
+    y:string
+  }
+  
+  function doStuff (params:A|B) {
+    if("x" in params){
+      console.log('a 接口')
+    }else{
+      console.log('b 接口')
+    }
+  }
+  
+  doStuff({x:111}) //ok
+  
+  doStuff({y:'33'}) //error
   ```
   
+  
+  
+- keyof：索引类型查询操作符，类似于object.keys，用于获取一个接口中key的联合类型
+
+  ```typescript
+  //keyof 操作符提取其属性的名称，该操作操作符可以用于某种类型的所有键，其返回类型是联合类型
+  interface Person {
+  name: string;
+    age: number;
+    location: string;
+  }
+  
+  type K1 = keyof Person; // "name" | "age" | "location"
+  type K2 = keyof Person[];  // number | "length" | "push" | "concat" | ...
+  type K3 = keyof { [x: string]: Person };  // string | number
+  ```
+  
+  
+  
+- Typeof ：检查类型了
+
+  ```typescript
+  //类型的检查直接在代码里检查类型了
+  function padLeft(value: string, padding: string | number) {
+    if (typeof padding === "number") {
+          return Array(padding + 1).join(" ") + value;
+      }
+      if (typeof padding === "string") {
+          return padding + value;
+      }
+      throw new Error(`Expected string or number, got '${padding}'.`);
+  }
+  //这些typeof类型保护只有两种形式能被识别：typeof v === "typename"和typeof v !== "typename"，"typename"必须是"number"，"string"，"boolean"或"symbol"。 但是TypeScript并不会阻止你与其它字符串比较，语言不会把那些表达式识别为类型保护
+  ```
+  
+- extends : 这个extends关键词不同于在class后使用extends的继承作用，他是泛型内对泛型加以约束的关键词
+
+  ```typescript
+  type BaseType = string | number | boolean
+   
+  // 这里表示 copy 的参数
+  // 传入的参数被约束为字符串、数字、布尔这几种基础类型
+  function copy<T extends BaseType>(arg: T): T {
+   return arg
+  }
   ```
 
-  
-
+- in : 主要的作用是做类型的映射，遍历已有接口的key或者遍历联合类型。
+- Exclude:
