@@ -157,4 +157,40 @@
   ```
 
 - in : 主要的作用是做类型的映射，遍历已有接口的key或者遍历联合类型。
+
 - Exclude:
+
+- readonly：
+
+  ```typescript
+  readonly与const的区别
+  //const
+  const aaa = 1323
+  aaa = 444 //error ，const不允许变量重新赋值，使用let可以
+  
+  
+  const foo: {
+      readonly bar: number;
+  } = {
+      bar: 222
+  }
+  
+  function imutateFoo(foo: { bar: number }) {
+      foo.bar = 456
+      // foo.bar = '456' //error，bar的类型是被定义为number的，这里设为string就会报错
+  }
+  
+  imutateFoo(foo);
+  console.log(foo.bar, 'xxxxxxxx'); //ok，因为readonly只是限定了类型，不会限定变量赋值。
+  
+  ```
+
+  
+
+- 
+
+- 
+
+- 
+
+  
