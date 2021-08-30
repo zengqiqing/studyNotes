@@ -56,7 +56,79 @@
     **/
     ```
 
+  - #### 以下代码说明 promise 的状态一旦决定后则不会再被修改
+
+    promse对象代表一个异步操作，有三种状态：pending(挂起),fulfilled(成功),rejected(失败)。只有异步操作的结果，可以决定当前状态，其他操作无法改变这个状态，一旦状态凝固了就不会在变，会一直保持这个结果。
+
+    ```javascript
+  let p = new Promise((resolve,reject)=>{
+        resolve('success1')
+        reject('error')
+        resolve('success2')
+    })
+    
+    p.then(res=>{
+        console.log('--res----',res)
+  }).then(err=>{
+        console.log('--err---',err)
+  })
+    
+  //--res---- success1
+    //--err--- undefined
+    1.从上面的打印可以得出，promise的内部代码是同步的，一旦得出状态结果后，则不再改变其状态。
+    2.无论状态结果为何，res和err 的回调都会走
+    ```
+
+  - #### promise缺点：
+
+    1.首先无法取消 promise，一点新建他就会立即执行，无法中途取消。
+
+    2.如果不设置回调函数，promise 内部就会抛出错误。
+
+    3.当处于 pendding 状态，则无法得知目前进展到哪一步。
+
+    
+
   - ### <font color='red'>promise 周边</font>
+
+    #### promise什么时候搭配 new 来使用，搭配 new 和不使用 new的区别是什么？
+
+    ````
+    有启示性的构造器 promise 必须跟 new 一起使用，并且必须提供一个函数回调。这个回调是同步或者立即调用的。这个函数接收两个函数回调，用以支持 promise 的决议。---摘录《你不知道的 js》
+    
+    下面是我的尝试👇
+    const first = ()=>{
+    	return Promise((resolve,reject)=>{
+    		resolve(1111)
+    	})
+    }
+    
+    first()//浏览器报错，undefined is not a promise
+    -------------------------------------------------------------
+    const first = ()=>{
+    	return new Promise((resolve,reject)=>{
+    		resolve(1111)
+    	})
+    }
+    first()//浏览器正常打印，1111
+    -------------------------------------------------------------
+    const first = Promise.reslove(1111) 
+    first.then(res=>{
+    	console.log(res) //1111
+    })
+    -------------------------------------------------------------
+    var first = new Promise((resolve)=>{
+        resolve(111)
+    })
+    
+    first.then((res)=>{
+        console.log(res)
+    })//111
+    -------------------------------------------------------------
+    
+    ````
+
+    
 
     #### Promise.finally()
 
@@ -208,11 +280,7 @@
       })// hello 打印回调值
       ```
 
-      
-
 - ### Async/await
-
-  
 
   	- async函数的实现原理,是将 Generator函数和自执行器,包装在一个函数里.async/Await的作用就是把异步变成同步,他是异步编程的终极方案
 
@@ -233,7 +301,7 @@
   asyncPrint('hello',500)
   
   ```
-
+  
 - async 函数返回的 promise 对象,必须等到内部所有的 await 命令后面的 promise 对象执行完才会发生状态改变,除非遇到 return 语句或者抛出错误.也就是说只有 async 函数内部的异步操作执行完,才会执行 then 方法指定的回调函数
 
 - 正常情况下,await命令后面是一个 promise 对象,返回该对象的结果,如果不是 promise 对象就直接返回对应的值
@@ -288,6 +356,90 @@
   
   ```
 
+- 如何理解Async/await具有传染性
+
+  ```javascript
+  function getPicNum(num) {
+      num = num + 1
+      return num;
+    }
+    function getTotalPicNum(user1, user2) {
+      const num1 = getPicNum(user1)
+      const num2 = getPicNum(user2)
+      return num1 + num2
+    }
+  
+    async function getTotalPicNum(user1, user2) {
+      const pic1 = await getPicNum(user1)
+      const pic2 = await getPicNum(user2)
+      return pic1 + pic2
+    }
+  	//如果屏蔽getTotalPicNum的方法,单纯执行getTotalPicNum,那么a打印出来的是就是结果值,但如果getTotalPicNum没有被屏蔽,其有调用getPicNum方法时,那么getTotalPicNum执行打印出来的a是一个promise。此处提现了async/await的传染性。
+    const a = getTotalPicNum(1, 2)
+    console.log(a, '--- a ---');
+  
+  //解决async/await 传染性的问题：
+  //解读：使用async/await的原因是是为了解决异步问题，async function的本质就是对promise的封装。不想使用async/await 建议使用promise/then的方式。
+  
+  ```
+
+  
+
+  #### setTimoutout的时间设定为 0 会发生什么事？
+  
+  下面代码是不是觉得很奇怪，为什么我的 setTimeout的时间设为 0 了，但他里面的 console 执行反而是最晚的呢？
+  
+  ```javascript
+  settsetTimeout(()=>{
+      console.log(1)
+  },)
+  
+  console.log(2)
+  console.log(3)
+  
+  //结果打印为 231
+  
+  原因：因为 js 是单线程的，单线程就意味着所有的任务都需要排队执行，前一个任务结束了，才会执行后一个任务，如果前任务耗时很长，后一个任务就不得不一直等待着。而浏览器的内核是多线程的，一个浏览器至少实现三个常驻线程：js 引擎线程，GUI 渲染线程，浏览器事件触发线程。
+  
+  1.js 引擎浏览器基于事件驱动单线程执行，js 引擎一直等待着任务队列中任务的到来，然后加以处理，浏览器无论何时都只有一个 js 线程在运行 js 代码。
+  
+  2.GUI渲染线程负责渲染浏览器界面，当界面重绘或回流时，该线程就会执行了，但注意 JS 线程和 GUI渲染线程是互斥的，当 JS 引擎执行时，GUI 线程就会被挂起，GUI 更新会被保存在一个队列中等 js引擎空闲时立即执行。
+  
+  3.事件触发线程，当一个事件被触发时，该线程会把事件添加到待处理队列的队尾，等待 js 引擎处理。这些事件可能来自 js 引擎当前执行的代码块，如 setTimeout，也可能来自浏览器内核的其他线程例如 click 事件，ajax 异步请求等，但由于 js 的单线程关系所有这事件都必须排队等 js 引擎处理完(当线程中没有执行任何同步代码的前提下才会执行异步)。那么当 js 引擎遇到定时器时，会将setTimeout中的 fn 这个函数放到任务队列中，当JS引擎空闲时并达到定时器的指定延迟时间时，才会将 fn 放到 js 引擎中执行。
+  
+  一句话总结：js 会先执行同步代码，空闲且到达定时器设定的时间后，fn 才被放到执行的任务队列中。
+  ```
+  
+  
+  
+  #### 当 promise和setTimeout结合时，会发生什么事呢？
+  
+  ```javascript
+  var first = ()=>{
+  console.log(111)
+      return new Promise((resolve,reject)=>{
+          console.log(222)
+          setTimeout(()=>{
+              console.log(3333)
+              resolve(4444)
+          },0)
+          resolve(5555)
+      })
+  }
+  
+  first().then(res=>{
+      console.log(res)
+  })
+  
+  //111，222，5555，3333
+  
+  1.因为first被调用了，所以先是进first函数内部，遇见 111。
+  2.此时执行 promise，遇见 222。
+  3.因为定时器在 promise里面，promise内部是同步执行的，所以当碰到定时器时，定时器会等同步执行完后才会执行定时器内部的代码。此刻他往下走了，碰到resolve。至此 promise 返回了状态结果。
+  4.promise 的内部同步代码执行完毕，那么回过头去执行定时器。所以打印 3333
+  为什么没有打印 444 呢，是因为 promise一旦状态改变，则不会改变其状态，也就是说已经 resolve 或者 reject 完， 其余的状态值都是无效的。
+  ```
+  
   
 
 延伸问题:
@@ -301,9 +453,11 @@ promise是ES6，async/await是ES7,async/await 是基于 promise 实现的,写法
 
 
 
-
-
 了解完 promise 和 async/await 的用法后,我们将进入更深入的了解:
 
 setTimeout async promise 执行顺序.
+
+async/await  &&  try/catch的使用
+
+promise 与 try/catch的使用
 
