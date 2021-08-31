@@ -385,8 +385,31 @@
   
   ```
 
-  
+  - 
 
+  延伸问题:
+  
+  Promise 和 async/await 的区别是什么?
+  
+  ```
+  promise是ES6，async/await是ES7,async/await 是基于 promise 实现的,写法更加优雅他们共同的目的都为了解决编程异步问题
+  他们的 reject 状态不一样,promise错误可以通过catch来捕捉，建议尾部捕获错误;async/await既可以用.then又可以用try-catch捕捉
+  ```
+  
+  
+  
+  了解完 promise 和 async/await 的用法后,我们将进入更深入的了解:
+  
+  setTimeout async promise 执行顺序.
+  
+  async/await  &&  try/catch的使用
+  
+  promise 与 try/catch的使用
+  
+  
+  
+  ### setTimeout 的故事
+  
   #### setTimoutout的时间设定为 0 会发生什么事？
   
   下面代码是不是觉得很奇怪，为什么我的 setTimeout的时间设为 0 了，但他里面的 console 执行反而是最晚的呢？
@@ -417,8 +440,10 @@
   #### 当 promise和setTimeout结合时，会发生什么事呢？
   
   ```javascript
-  var first = ()=>{
-  console.log(111)
+  
+  var first = async()=>{
+      console.log(111)
+      await async1()
       return new Promise((resolve,reject)=>{
           console.log(222)
           setTimeout(()=>{
@@ -432,34 +457,25 @@
   first().then(res=>{
       console.log(res)
   })
+  var async1 = () =>{
+      console.log('666')
+  }
   
-  //111，222，5555，3333
+  //111，666,222，5555，3333
   
   1.因为first被调用了，所以先是进first函数内部，遇见 111。
-  2.此时执行 promise，遇见 222。
-  3.因为定时器在 promise里面，promise内部是同步执行的，所以当碰到定时器时，定时器会等同步执行完后才会执行定时器内部的代码。此刻他往下走了，碰到resolve。至此 promise 返回了状态结果。
-  4.promise 的内部同步代码执行完毕，那么回过头去执行定时器。所以打印 3333
+  2.当碰到 awiat时，就会先执行 await 里面的内容，打印 666
+  3.此时执行 promise，遇见 222。
+  4.因为定时器在 promise里面，promise内部是同步执行的，所以当碰到定时器时，定时器会等同步执行完后才会执行定时器内部的代码。此刻他往下走了，碰到resolve。至此 promise 返回了状态结果。
+  5.promise 的内部同步代码执行完毕，那么回过头去执行定时器。所以打印 3333
   为什么没有打印 444 呢，是因为 promise一旦状态改变，则不会改变其状态，也就是说已经 resolve 或者 reject 完， 其余的状态值都是无效的。
   ```
   
   
 
-延伸问题:
+当 setTimeout,promise 遇上时，他们的执行时机是什么呢？当遇到 async/await 时呢？请查阅另外一篇文章
 
-Promise 和 async/await 的区别是什么?
+<a name="jump" href="../javaScript/关于宏观任务和微观任务的知识.md#test">跳转到深拷贝，浅拷贝的知识》》》》</a>
 
-```
-promise是ES6，async/await是ES7,async/await 是基于 promise 实现的,写法更加优雅他们共同的目的都为了解决编程异步问题
-他们的 reject 状态不一样,promise错误可以通过catch来捕捉，建议尾部捕获错误;async/await既可以用.then又可以用try-catch捕捉
-```
-
-
-
-了解完 promise 和 async/await 的用法后,我们将进入更深入的了解:
-
-setTimeout async promise 执行顺序.
-
-async/await  &&  try/catch的使用
-
-promise 与 try/catch的使用
+（按住command 时再点击才能跳转）
 
