@@ -493,7 +493,7 @@ indexOf对空格敏感，会把空格也计算在内的
 
 <font color='red'>**flat的使用**：</font>
 
-**flat()** 方法会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回。可以扁平化嵌套数组。并且去除空项
+**flat()** 方法会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回。可以扁平化嵌套数组。并且去除空项。注意：个别低版本的iphone手机不支持flat的使用，可以用下面的方法2代替
 
 深层嵌套扁平化方法：`flat(Infinity)`
 
@@ -509,6 +509,20 @@ flattenDeep([1, [[2], [3, [4]], 5]])
 
 ```
 
+<font color='red'>**多维数组降级操作方法2：**</font>
+
+```javascript
+function flatten(ary) {
+    return ary.reduce((pre, cur) => {
+        return pre.concat(Array.isArray(cur) ? flatten(cur) : cur);
+    }, []);
+}
+let ary = [1, 2, [3, 4], [5, [6, 7]]]
+console.log(flatten(ary))
+```
+
+
+
 <font color='red'>**比较2个数组，取交集，并集，差值**</font>
 
 1.数组中含对象：
@@ -517,13 +531,13 @@ flattenDeep([1, [[2], [3, [4]], 5]])
 1.取差集
     let a=[{id:1,a:123,b:1234},{id:2,a:123,b:1234}];
     let b=[{id:1,a:123,b:1234},{id:2,a:123,b:1234},{id:3,a:123,b:1234},{id:4,a:123,b:1234}];
-    let arr = [...b].filter(x => [...a].every(y => y.id !== x.id));
+    let arr = b.filter(x => a.every(y => y.id !== x.id));
     console.log('arr',arr);
 
 2.取交集
     let a=[{id:1,a:123,b:1234},{id:2,a:123,b:1234}];
     let b=[{id:1,a:123,b:1234},{id:2,a:123,b:1234},{id:3,a:123,b:1234},{id:4,a:123,b:1234}];
-    let arr = [...b].filter(x => [...a].some(y => y.id === x.id));
+    let arr = b.filter(x => a.some(y => y.id === x.id));
     console.log('arr',arr)
 
 ```

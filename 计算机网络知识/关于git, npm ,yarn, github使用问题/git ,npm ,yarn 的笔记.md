@@ -31,3 +31,12 @@ Git代码回滚方法：https://blog.csdn.net/jiadajing267/article/details/88386
 <img src="/var/folders/65/71xg97ds6hnc7_6xq9b987rh0000gp/T/com.yinxiang.Mac/WebKitDnD.wBWl7R/328F74CE-7460-4AA0-B269-389C9D6A8306.png" alt="328F74CE-7460-4AA0-B269-389C9D6A8306" style="zoom:33%;" />
 
 <img src="/var/folders/65/71xg97ds6hnc7_6xq9b987rh0000gp/T/com.yinxiang.Mac/WebKitDnD.QG4QfN/ED15A993-0083-4839-95A5-E12D8FD3F178.png" alt="ED15A993-0083-4839-95A5-E12D8FD3F178" style="zoom:50%;" />
+
+
+
+查看具体文件的所有的commit操作命令：
+
+```
+git log --stat --full-history --simplify-merges -- src/aliance/views/marketManagement/coupon/couponDetail/activity.vue
+```
+

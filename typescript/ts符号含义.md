@@ -90,7 +90,7 @@
   ```typescript
   interface A {
     x:number;
-}
+  }
   
   interface B {
     y:string
@@ -156,9 +156,30 @@
   }
   ```
 
+  extends不一定就是强制满足继承关系，而是检查是否满足结构兼容性。
+
+  ```typescript
+  //条件类型会以一个条件表达式进行类型关系检测，从而在两种类型中选择其一
+  T extends U ? X:Y
+  // 以上表达式的意思是：若 T 能够赋值给 U，那么类型是 X，否则为 Y
+  ```
+
+  
+
 - in : 主要的作用是做类型的映射，遍历已有接口的key或者遍历联合类型。
 
-- Exclude:
+- Exclude:将某个类型中属于另一个的类型移除掉
+
+  ```typescript
+  //如果 T 能赋值给 U 类型的话，那么就会返回 never 类型，否则返回 T 类型。最终实现的效果就是将 T 中某些属于 U 的类型移除掉。
+  type Exclude<T, U> = T extends U ? never : T;
+  
+  type T0 = Exclude<"a" | "b" | "c", "a">; // "b" | "c"
+  type T1 = Exclude<"a" | "b" | "c", "a" | "b">; // "c"
+  //逗号后面的内容就是要被移除的内容哦！
+  ```
+
+  
 
 - readonly：
 
@@ -186,6 +207,73 @@
   ```
 
   
+
+- Infer:可以在extends条件类型的字句中，在真实分支中引用此推断类型变量，推断待推断的类型。
+
+- ReturnType<T>：获取函数类型的返回值
+
+- Partial：将某个类型里的属性全部变为可选选项 `?`
+
+  ```typescript
+  interface someThing {
+      sky:string;
+      water:number;
+      air:string
+  }
+  
+  type person = Partial<someThing>;
+  
+  //Partial 的实现
+  // type Partial <T> = {
+  //     [p in keyof T] ? T[p]
+  // }
+  
+  //那么P1就可以不需要必定传入someThing叙述的所有值啦！
+  const P1: person = {
+      sky:'1'
+  }
+  ```
+
+- Pick:将某个类型中的子属性挑出来，变成包含这个类型部分属性的子类型
+
+  ```typescript
+  interface Todo {
+      title:string;
+      completed:boolean;
+      desc:string
+  }
+  
+  type TodoPreview = Pick<Todo,'title'|'desc'>
+  
+  //这里不能传入completed啦!
+  const myTodo:TodoPreview = {
+      title:'1',
+      desc:'1'
+  }
+  ```
+
+  
+
+- Omit:使用T类型中除了K类型的所有属性,来构造一个新的类型(通俗理解就是除了x属性外，其他均属性组成一个新的类型)
+
+  ```typescript
+  interface Todo {
+      title:string;
+      completed:boolean;
+      desc:string
+  }
+  
+  type TodoPreview = Omit<Todo,'desc'|'title'>
+  
+  const myTodoEvent:TodoPreview = {
+      completed:true,
+      // title:'s'  title被排除在外了，所以这里不能写title
+  }
+  ```
+  
+  
+  
+- 
 
 - 
 
