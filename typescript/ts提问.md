@@ -87,3 +87,43 @@ x = y;  // error, x and y are not compatible
 
 implements还没搞太清楚。
 
+
+
+如题：泛型 `T` 只是约束于`User`类型，并不是局限于 `User`类型；那么泛型的作用只是约束，不是局限，这样理解对吗？
+
+```typescript
+type User = {
+  id: number;
+  kind: string;
+};
+
+function makeCustomer<T extends User>(u: T): T {
+  // Error（TS 编译器版本：v4.4.2）
+  // Type '{ id: number; kind: string; }' is not assignable to type 'T'.
+  // '{ id: number; kind: string; }' is assignable to the constraint of type 'T', 
+  // but 'T' could be instantiated with a different subtype of constraint 'User'.
+  return {
+    id: u.id,
+    kind: 'customer'
+  }
+}
+
+//上面的写法会报错，答案解析是因为上面代码出现错误原因：泛型 T 只是约束于User类型，并不是局限于 User类型，所以返回结果 应该还需要接收其他类型变量。
+
+//正确的写法：
+type User = {
+  id: number;
+  kind: string;
+};
+
+function makeCustomer<T extends User>(u: T): T {
+  return {
+    ...u,
+    id: u.id,
+    kind: "customer",
+  };
+}
+```
+
+
+

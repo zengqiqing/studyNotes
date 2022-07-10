@@ -288,11 +288,51 @@ arrayNewSet = (array) => {
 去重方法二：
 
 ```javascript
-var newArr = arr.reduce(function (prev, cur) {
-    prev.indexOf(cur) === -1 && prev.push(cur);
-    return prev;
-},[]);
-
+var arr = [
+      {
+         name:'zhangsan',
+            age:12
+      },
+        {
+         name:'lisi',
+         age:14
+      },
+      {
+         name:'zhangsan',
+            age:12
+      },
+        {
+         name:'lisi',
+         age:14
+      },
+      {
+         name:'zhangsan',
+            age:12
+      },
+        {
+         name:'lisi',
+         age:14
+      },
+      {
+         name:'zhangsan',
+            age:12
+      },
+        {
+         name:'wangwu',
+         age:16
+      },
+      {
+         name:'wagnwu',
+            age:16
+      },
+        {
+         name:'lisi',
+         age:14
+      },
+      
+   ]
+   var r = arr.reduce((all, next) => all.some((atom) => atom["age"] == next["age"]) ? all : [...all, next],[]);
+   console.log(r);
 ```
 
 
