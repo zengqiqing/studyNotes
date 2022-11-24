@@ -1,0 +1,1 @@
+1.场景:支持传入labelPosition属性决定标签所在位置。该属性可传入可不传入。但当labelPosition值为inside时就必须要有labelBgcFill或labelBgcGradient其中一个属性。且值必须为true.当labelPosition值为bottom，那么不需要传入labelBgcFill和labelBgcGradient。

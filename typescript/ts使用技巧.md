@@ -39,4 +39,51 @@ f(1, null); // error, 'null' is not assignable to 'number | undefined'
     const bad:FromIndex = {b:1,c:2,d:3} //error，因为d变量没有被定义
     ```
 
-    
+- 解决cb回调函数报错：
+
+  ```typescript
+  declare function isfunction(cb:unknown):cb is Function;//使用unknown定义
+  function f20(cb:unknown){//结合判断条件
+      if(cb instanceof Error){
+          cb;
+      }
+      if(isfunction(cb)){
+          cb;
+      }
+  }
+  ```
+
+- 如何减少接口中的属性重复定义：除了可以利用extends和’&‘以外，还可以利用in 或pick
+
+  ```typescript
+  interface State {
+      userId:string;
+      pageTitle:string;
+      recentFiles:string[];
+      pageContents:string;
+  }
+  
+  interface TopNabState{
+      userId:string;
+      pageTitle:string;
+      recentFiles:string[];
+  }
+  
+  // 1.利用in符号将属性中的类型进行映射组成一个新的接口哦！
+  type TopNavState = {
+      [k in 'userId'|'pageTitle'|'recentFiles']:State[k]
+  }
+  
+  //2.利用pick方法更简洁哦！
+  type TopNavState2 = Pick<State,'userId'|'pageTitle'|'recentFiles'>
+  const val:TopNavState2 = {
+      userId:'string',
+      pageTitle:'string',
+      recentFiles:['string'],
+      name:'coco'//error
+  }
+  
+  ```
+  
+  
+
