@@ -77,16 +77,6 @@ https协议握手阶段比较费时，连接不如http高效，加密通信与�
 
 少许对客户端有要求的情况下,会要求客户端也必须有一个证书.
 
-**Http的发展历程：**
-
-<img src="/var/folders/65/71xg97ds6hnc7_6xq9b987rh0000gp/T/com.yinxiang.Mac/WebKitDnD.NaNksO/039A7690-971B-4254-AD35-EA12342F4ABC.png" alt="039A7690-971B-4254-AD35-EA12342F4ABC" style="zoom:33%;" />
-
-<img src="/var/folders/65/71xg97ds6hnc7_6xq9b987rh0000gp/T/com.yinxiang.Mac/WebKitDnD.pR4DSP/37DF8EEC-C7FB-4BAA-852C-AF763825750B.png" alt="37DF8EEC-C7FB-4BAA-852C-AF763825750B" style="zoom: 33%;" />
-
-<img src="/var/folders/65/71xg97ds6hnc7_6xq9b987rh0000gp/T/com.yinxiang.Mac/WebKitDnD.IOXFKL/9D19B8AB-13FE-40D7-A2AC-99B60DAFF5BE.png" alt="9D19B8AB-13FE-40D7-A2AC-99B60DAFF5BE" style="zoom: 33%;" /><img src="/var/folders/65/71xg97ds6hnc7_6xq9b987rh0000gp/T/com.yinxiang.Mac/WebKitDnD.fjx3zF/EADA4CDD-0136-4F16-8089-A624571A9097.png" alt="EADA4CDD-0136-4F16-8089-A624571A9097" style="zoom:33%;" />
-
-<img src="/var/folders/65/71xg97ds6hnc7_6xq9b987rh0000gp/T/com.yinxiang.Mac/WebKitDnD.fjx3zF/EADA4CDD-0136-4F16-8089-A624571A9097.png" alt="EADA4CDD-0136-4F16-8089-A624571A9097" style="zoom:33%;" />
-
 **Get请求和Post请求的区别** 
 
 （1）使用Get请求时,参数在URL中显示,而使用Post请求,则不会显示出来； 
