@@ -20,7 +20,7 @@
 
     - 如果promise的状态是pending，需要将onFulfilled和onRejected函数存放起来，等待状态确定后，再依次将对应的函数执行(发布订阅).
 
-    - 如果 then 返回的是一个promise,那么需要等这个promise，那么会等这个promise执行完，promise如果成功， 就走下一个then的成功，如果失败，就走下一个then的失败
+    - 如果 then 返回的是一个promise,那么需要等这个promise执行完毕，promise如果成功， 就走下一个then的成功，如果失败，就走下一个then的失败
 
       
 
@@ -58,7 +58,7 @@
 
   - #### 以下代码说明 promise 的状态一旦决定后则不会再被修改
 
-    promse对象代表一个异步操作，有三种状态：pending(挂起),fulfilled(成功),rejected(失败)。只有异步操作的结果，可以决定当前状态，其他操作无法改变这个状态，一旦状态凝固了就不会在变，会一直保持这个结果。
+    promise对象代表一个异步操作，有三种状态：pending(挂起),fulfilled(已成功),rejected(已失败)。只有异步操作的结果，可以决定当前状态，其他操作无法改变这个状态，一旦状态凝固了就不会在变，会一直保持这个结果。
 
     ```javascript
     let p = new Promise((resolve,reject)=>{
@@ -76,11 +76,11 @@
     //--res---- success1
     //--err--- undefined
     1.从上面的打印可以得出，promise的内部代码是同步的，一旦得出状态结果后，则不再改变其状态。
-    2.无论状态结果为何，res和err 的回调都会走
+    2.无论状态结果为何，res和err 的回调打印，但是否有对应回调结果则由promise函数内部中首先执行状态来决定
 
    #### promise缺点：
 
-    1.首先无法取消 promise，一点新建他就会立即执行，无法中途取消。
+    1.首先无法取消 promise，一旦新建他就会立即执行，无法中途取消。
 
     2.如果不设置回调函数，promise 内部就会抛出错误。
 
@@ -149,13 +149,13 @@
   
   实战场景:Promse.all在处理多个异步处理时非常有用，比如说一个页面上需要等两个或多个ajax的数据回来以后才正常显示，在此之前只显示loading图标。
   
-    - Pormise.all可以将多个 promise实例包装成一个新的 promise.all结果数据在数组中的排序和请求所需的时间无关，与请求数组事件的排列顺序有关系。就是这个语句:`Promise.all([func2(),func1()])`
+    - Pormise.all可以将多个 promise实例包装成一个新的实例方法。 promise.all结果返回顺序与请求所需的时间无关，与请求数组事件的排列顺序有关。就是这个语句:`Promise.all([func2(),func1()])`
   
-    - 如果其中接口出现 reject情况,那么只会返回错误的内容信息,另一个成功接口的内容是不会 resolve 出来的.如果 2 个接口都出现 reject情况,那么会先返回语法中排第一个的接口的错误信息出来
+    - 如果其中promise实例出现 reject情况,promise.all终止遍历并回调错误的内容信息,其余执行成功的promise实例内容是不会显示出来的因为promise内部发生错误了。如果 2 个接口都出现 reject情况,那么会先返回语法中排第一个的接口的错误信息出来
 
     - 如果参数中有一个promise失败，那么Promise.all返回的promise对象失败
   
-    - 在任何情况下，Promise.all 返回的 promise 的完成状态的结果都是一个数组
+    - 在所以的promise实例都执行成功的情况下，Promise.all 返回的完成结果都放置在数组上
   
       ```javascript
        var func1 = () => {
